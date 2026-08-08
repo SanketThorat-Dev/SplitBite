@@ -31,49 +31,49 @@ export default function Dashboard() {
       setBatch(data);
     } catch (err) {
       console.error("Failed to load batch:", err);
-    } 
+    }
   }
 
   async function loadTodayActivity() {
-  try {
-    const activity = await getTodayActivity();
-    setTodayActivity(activity);
-  } catch (err) {
-    console.error("Failed to load activity:", err);
+    try {
+      const activity = await getTodayActivity();
+      setTodayActivity(activity);
+    } catch (err) {
+      console.error("Failed to load activity:", err);
+    }
   }
-}
 
-async function refreshDashboard() {
+  async function refreshDashboard() {
 
-  setLoading(true);
+    setLoading(true);
 
-  await Promise.all([
-    loadBatch(),
-    loadTodayActivity(),
-    loadMonthlySummary(),
-  ]);
+    await Promise.all([
+      loadBatch(),
+      loadTodayActivity(),
+      loadMonthlySummary(),
+    ]);
 
-  setLoading(false);
+    setLoading(false);
 
-}
-
-async function loadMonthlySummary() {
-  try {
-    const summary = await getMonthlySummary();
-    setMonthlySummary(summary);
-  } catch (err) {
-    console.error(err);
   }
-}
 
-function logout() {
-  localStorage.removeItem("roommate");
-  navigate("/");
-}
+  async function loadMonthlySummary() {
+    try {
+      const summary = await getMonthlySummary();
+      setMonthlySummary(summary);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem("roommate");
+    navigate("/");
+  }
 
   useEffect(() => {
-  refreshDashboard();
-}, []);
+    refreshDashboard();
+  }, []);
 
   if (!user) {
     return <Navigate to="/" replace />;
@@ -94,19 +94,30 @@ function logout() {
 
         <div className="flex justify-between items-center mb-6">
 
-        <button
+          <button
             onClick={() => logout()}
-            className="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600"
-        >
+            className="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 transition"
+          >
             🚪 Logout
-        </button>
+          </button>
 
-        <button
-            onClick={() => navigate("/admin")}
-            className="bg-black text-white px-4 py-2 rounded-xl hover:bg-gray-800"
-        >
-            ⚙️ Admin
-        </button>
+          <div className="flex gap-2">
+
+            <button
+              onClick={() => navigate("/change-pin")}
+              className="bg-white px-4 py-2 rounded-xl shadow hover:bg-gray-100 transition"
+            >
+              🔐 PIN
+            </button>
+
+            <button
+              onClick={() => navigate("/admin")}
+              className="bg-black text-white px-4 py-2 rounded-xl hover:bg-gray-800 transition"
+            >
+              ⚙️ Admin
+            </button>
+
+          </div>
 
         </div>
 
@@ -129,10 +140,10 @@ function logout() {
             <QuickActions
               user={user}
               batch={batch}
-              onConsumptionLogged={refreshDashboard}            />
+              onConsumptionLogged={refreshDashboard} />
 
-              <ActivityCard activity={todayActivity} />
-              <MonthlySummary summary={monthlySummary} />
+            <ActivityCard activity={todayActivity} />
+            <MonthlySummary summary={monthlySummary} />
           </>
         )}
 
