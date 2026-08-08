@@ -1,6 +1,6 @@
 import { supabase } from "./supabase";
 
-export async function getActiveBatch() {
+export async function getAvailableBatches() {
   const { data, error } = await supabase
     .from("inventory_batches")
     .select(`
@@ -9,16 +9,19 @@ export async function getActiveBatch() {
       remaining_quantity,
       price,
       purchase_date,
+      active,
       inventory_items (
         id,
         name,
         unit
       )
     `)
-    .eq("active", true)
-    .maybeSingle();
+    .gt("remaining_quantity", 0)
+    .order("purchase_date", { ascending: true });
 
   if (error) throw error;
+
+  console.log("Inventory batches:", data);
 
   return data;
 }

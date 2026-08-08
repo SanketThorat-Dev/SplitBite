@@ -3,7 +3,6 @@ import { logConsumption } from "../../services/consumption";
 
 export default function QuickActions({
   user,
-  batch,
   onConsumptionLogged,
 }) {
   const [loading, setLoading] = useState(false);
@@ -20,13 +19,6 @@ export default function QuickActions({
       return;
     }
 
-    if (qty > batch.remaining_quantity) {
-      alert(
-        `Only ${batch.remaining_quantity} eggs are remaining.`
-      );
-      return;
-    }
-
     // Don't log yet — ask for confirmation
     setPendingQuantity(qty);
   }
@@ -39,7 +31,6 @@ export default function QuickActions({
 
       await logConsumption(
         user.id,
-        batch.id,
         pendingQuantity
       );
 

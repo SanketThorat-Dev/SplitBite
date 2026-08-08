@@ -1,25 +1,24 @@
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
 
 import { getCurrentUser } from "../utils/session";
-import { getActiveBatch } from "../services/inventory";
+import { getAvailableBatches } from "../services/inventory";
 
 import InventoryCard from "../components/dashboard/InventoryCard";
 import QuickActions from "../components/dashboard/QuickActions";
-import { getTodayActivity } from "../services/activity";
 import ActivityCard from "../components/dashboard/ActivityCard";
 import MonthlySummary from "../components/dashboard/MonthlySummary";
-import { getMonthlySummary } from "../services/summary";
 import ConsumptionHistory from "../components/dashboard/ConsumptionHistory";
 import PriceHistory from "../components/dashboard/PriceHistory";
+
+import { getTodayActivity } from "../services/activity";
+import { getMonthlySummary } from "../services/summary";
 
 export default function Dashboard() {
   const user = getCurrentUser();
   const navigate = useNavigate();
 
-  const [batch, setBatch] = useState(null);
+  const [batches, setBatches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [todayActivity, setTodayActivity] = useState([]);
   const [monthlySummary, setMonthlySummary] = useState([]);
@@ -27,45 +26,52 @@ export default function Dashboard() {
 
   async function loadBatch() {
     try {
-      const data = await getActiveBatch();
+      const data = await getAvailableBatches();
 
-      console.log("Active Batch:", data);
+      console.log("Inventory Batches:", data);
 
-      setBatch(data);
+      setBatches(data || []);
     } catch (err) {
-      console.error("Failed to load batch:", err);
+      console.error("Failed to load inventory:", err);
+      setBatches([]);
     }
   }
 
   async function loadTodayActivity() {
     try {
       const activity = await getTodayActivity();
-      setTodayActivity(activity);
+
+      setTodayActivity(activity || []);
     } catch (err) {
       console.error("Failed to load activity:", err);
+      setTodayActivity([]);
+    }
+  }
+
+  async function loadMonthlySummary() {
+    try {
+      const summary = await getMonthlySummary();
+
+      setMonthlySummary(summary || []);
+    } catch (err) {
+      console.error("Failed to load monthly summary:", err);
+      setMonthlySummary([]);
     }
   }
 
   async function refreshDashboard() {
     setLoading(true);
 
-    await Promise.all([
-      loadBatch(),
-      loadTodayActivity(),
-      loadMonthlySummary(),
-    ]);
-
-    setHistoryRefreshKey((prev) => prev + 1);
-
-    setLoading(false);
-  }
-
-  async function loadMonthlySummary() {
     try {
-      const summary = await getMonthlySummary();
-      setMonthlySummary(summary);
-    } catch (err) {
-      console.error(err);
+      await Promise.all([
+        loadBatch(),
+        loadTodayActivity(),
+        loadMonthlySummary(),
+      ]);
+
+      setHistoryRefreshKey((prev) => prev + 1);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -87,6 +93,8 @@ export default function Dashboard() {
 
       <div className="max-w-md mx-auto">
 
+        {/* Header */}
+
         <h1 className="text-3xl font-bold">
           Hi, {user.name} 👋
         </h1>
@@ -95,10 +103,12 @@ export default function Dashboard() {
           Welcome back to SplitBite
         </p>
 
+        {/* Navigation */}
+
         <div className="flex justify-between items-center mb-6">
 
           <button
-            onClick={() => logout()}
+            onClick={logout}
             className="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 transition"
           >
             🚪 Logout
@@ -124,35 +134,69 @@ export default function Dashboard() {
 
         </div>
 
+        {/* Loading */}
+
         {loading && (
           <p className="text-gray-500">
             Loading inventory...
           </p>
         )}
 
-        {!loading && !batch && (
+        {/* No inventory */}
+
+        {!loading && batches.length === 0 && (
           <div className="bg-white rounded-2xl shadow p-6">
-            <p>No active batch found.</p>
+            <p>No inventory available.</p>
           </div>
         )}
 
-        {batch && (
+        {/* Inventory */}
+
+        {!loading && batches.length > 0 && (
           <>
-            <InventoryCard
-              batch={batch}
-              monthlySummary={monthlySummary}
-            />
+            {/* Show every non-empty batch */}
+
+            <div className="space-y-5">
+
+              {batches.map((batch) => (
+                <InventoryCard
+                  key={batch.id}
+                  batch={batch}
+                  monthlySummary={monthlySummary}
+                />
+              ))}
+
+            </div>
+
+            {/* Consumption */}
 
             <QuickActions
               user={user}
-              batch={batch}
-              onConsumptionLogged={refreshDashboard} />
+              onConsumptionLogged={refreshDashboard}
+            />
 
-            <ActivityCard activity={todayActivity} />
-            <MonthlySummary summary={monthlySummary} />
-            <ConsumptionHistory refreshKey={historyRefreshKey} />
+            {/* Activity */}
+
+            <ActivityCard
+              activity={todayActivity}
+            />
+
+            {/* Monthly Summary */}
+
+            <MonthlySummary
+              summary={monthlySummary}
+            />
+
+            {/* Consumption History */}
+
+            <ConsumptionHistory
+              refreshKey={historyRefreshKey}
+            />
+
+            {/* Price History */}
 
             <PriceHistory />
+
           </>
         )}
 
