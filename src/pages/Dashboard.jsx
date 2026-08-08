@@ -12,6 +12,7 @@ import { getTodayActivity } from "../services/activity";
 import ActivityCard from "../components/dashboard/ActivityCard";
 import MonthlySummary from "../components/dashboard/MonthlySummary";
 import { getMonthlySummary } from "../services/summary";
+import ConsumptionHistory from "../components/dashboard/ConsumptionHistory";
 
 export default function Dashboard() {
   const user = getCurrentUser();
@@ -21,6 +22,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [todayActivity, setTodayActivity] = useState([]);
   const [monthlySummary, setMonthlySummary] = useState([]);
+  const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
 
   async function loadBatch() {
     try {
@@ -44,18 +46,18 @@ export default function Dashboard() {
   }
 
   async function refreshDashboard() {
+  setLoading(true);
 
-    setLoading(true);
+  await Promise.all([
+    loadBatch(),
+    loadTodayActivity(),
+    loadMonthlySummary(),
+  ]);
 
-    await Promise.all([
-      loadBatch(),
-      loadTodayActivity(),
-      loadMonthlySummary(),
-    ]);
+  setHistoryRefreshKey((prev) => prev + 1);
 
-    setLoading(false);
-
-  }
+  setLoading(false);
+}
 
   async function loadMonthlySummary() {
     try {
@@ -144,6 +146,7 @@ export default function Dashboard() {
 
             <ActivityCard activity={todayActivity} />
             <MonthlySummary summary={monthlySummary} />
+            <ConsumptionHistory refreshKey={historyRefreshKey} />
           </>
         )}
 

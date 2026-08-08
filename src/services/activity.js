@@ -9,3 +9,13 @@ export async function getTodayActivity() {
 
   return data;
 }
+
+export async function getConsumptionHistory() {
+  const { data, error } = await supabase.rpc(
+    "get_consumption_history"
+  );
+
+  if (error) throw error;
+
+  return data;
+}
