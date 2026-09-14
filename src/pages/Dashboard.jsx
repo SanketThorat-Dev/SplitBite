@@ -90,6 +90,7 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     refreshDashboard();
   }, []);
 
