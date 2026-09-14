@@ -105,6 +105,21 @@ export default function ConsumptionHistory({ refreshKey }) {
                     year: "numeric",
                   })}
                 </p>
+
+                <div className="mt-1">
+                  <span className="inline-flex items-center bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs px-2 py-1 rounded-full">
+                    🥚 Batch:{" "}
+                    {new Date(
+                      item.batch_purchase_date + "T00:00:00"
+                    ).toLocaleDateString("en-IN", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                    {" · ₹"}
+                    {Number(item.batch_price).toFixed(0)}
+                  </span>
+                </div>
               </div>
 
               <span className="font-bold text-green-600">
