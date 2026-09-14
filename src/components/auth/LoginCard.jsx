@@ -5,6 +5,7 @@ import { verifyPin } from "../../services/auth";
 export default function LoginCard({ roommate }) {
   const [expanded, setExpanded] = useState(false);
   const [pin, setPin] = useState("");
+  const [showPin, setShowPin] = useState(false);
 
   const navigate = useNavigate();
 
@@ -15,7 +16,7 @@ export default function LoginCard({ roommate }) {
       const user = await verifyPin(roommate.id, pin);
 
       if (!user) {
-        alert("Incorrect PIN");
+        alert("Incorrect Password");
         return;
       }
 
@@ -55,16 +56,25 @@ export default function LoginCard({ roommate }) {
           onSubmit={handleLogin}
           className="mt-5 space-y-3"
         >
-          <input
-            type="password"
-            maxLength={4}
-            value={pin}
-            onChange={(e) => setPin(e.target.value)}
-            placeholder="Enter PIN"
-            enterKeyHint="done"
-            inputMode="numeric"
-            className="w-full border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 rounded-xl p-3 text-center tracking-[10px]"
-          />
+          <div className="relative">
+            <input
+              type={showPin ? "text" : "password"}
+              value={pin}
+              onChange={(e) => setPin(e.target.value)}
+              placeholder="Enter password"
+              autoComplete="current-password"
+              className="w-full border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 rounded-xl p-3 pr-12 text-center"
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowPin((prev) => !prev)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-300"
+              aria-label={showPin ? "Hide password" : "Show password"}
+            >
+              {showPin ? "🙈" : "👁️"}
+            </button>
+          </div>
 
           <button
             type="submit"

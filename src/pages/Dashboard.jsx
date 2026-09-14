@@ -115,34 +115,34 @@ export default function Dashboard() {
 
         {/* Navigation */}
 
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between gap-2 items-center mb-6">
 
           <button
             onClick={logout}
-            className="bg-red-500 text-white px-3 py-2 rounded-xl hover:bg-red-600 transition text-sm"
+            className="flex-1 justify-center bg-red-500 text-white px-3 py-2 rounded-xl hover:bg-red-600 transition text-sm"
           >
             🚪 Logout
           </button>
 
-          <div className="flex gap-2 flex-nowrap justify-end">
+          <div className="flex gap-2 w-full">
 
             <button
               onClick={toggleTheme}
-              className="bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 px-3 py-2 rounded-xl shadow hover:bg-gray-100 dark:hover:bg-slate-700 transition text-sm"
+              className="flex-1 justify-center bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 px-3 py-2 rounded-xl shadow hover:bg-gray-100 dark:hover:bg-slate-700 transition text-sm"
             >
               {theme === "dark" ? "☀️" : "🌙"}
             </button>
 
             <button
               onClick={() => navigate("/change-pin")}
-              className="bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 px-3 py-2 rounded-xl shadow hover:bg-gray-100 dark:hover:bg-slate-700 transition text-sm"
+              className="flex-1 justify-center bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 px-3 py-2 rounded-xl shadow hover:bg-gray-100 dark:hover:bg-slate-700 transition text-sm"
             >
-              🔐 PIN
+              🔐 Password
             </button>
 
             <button
               onClick={() => navigate("/admin")}
-              className="bg-black dark:bg-white text-white dark:text-black px-3 py-2 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-200 transition text-sm"
+              className="flex-1 justify-center bg-black dark:bg-white text-white dark:text-black px-3 py-2 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-200 transition text-sm"
             >
               ⚙️ Admin
             </button>
