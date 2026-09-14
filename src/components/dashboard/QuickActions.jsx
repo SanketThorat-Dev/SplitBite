@@ -4,6 +4,7 @@ import { logConsumption } from "../../services/consumption";
 export default function QuickActions({
   user,
   onConsumptionLogged,
+  hasInventory,
 }) {
   const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
@@ -13,6 +14,11 @@ export default function QuickActions({
 
   function requestConsumption(qty) {
     if (loading) return;
+
+    if (!hasInventory) {
+      alert("No eggs are currently available. Please add a new inventory batch.");
+      return;
+    }
 
     if (!qty || qty <= 0) {
       alert("Quantity must be greater than 0");

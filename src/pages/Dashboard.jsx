@@ -145,60 +145,72 @@ export default function Dashboard() {
         {/* No inventory */}
 
         {!loading && batches.length === 0 && (
-          <div className="bg-white rounded-2xl shadow p-6">
-            <p>No inventory available.</p>
+          <div className="bg-white rounded-2xl shadow p-6 text-center">
+            <div className="text-4xl mb-3">
+              🥚
+            </div>
+
+            <h2 className="text-xl font-bold text-gray-800">
+              No eggs available
+            </h2>
+
+            <p className="text-gray-500 mt-2">
+              The current inventory has been fully consumed.
+            </p>
+
+            <p className="text-sm text-gray-400 mt-1">
+              Add a new batch from the Admin page when you restock.
+            </p>
           </div>
         )}
 
         {/* Inventory */}
 
         {!loading && batches.length > 0 && (
-          <>
-            {/* Show every non-empty batch */}
+          <div className="space-y-5">
 
-            <div className="space-y-5">
+            {batches.map((batch) => (
+              <InventoryCard
+                key={batch.id}
+                batch={batch}
+                monthlySummary={monthlySummary}
+              />
+            ))}
 
-              {batches.map((batch) => (
-                <InventoryCard
-                  key={batch.id}
-                  batch={batch}
-                  monthlySummary={monthlySummary}
-                />
-              ))}
-
-            </div>
-
-            {/* Consumption */}
-
-            <QuickActions
-              user={user}
-              onConsumptionLogged={refreshDashboard}
-            />
-
-            {/* Activity */}
-
-            <ActivityCard
-              activity={todayActivity}
-            />
-
-            {/* Monthly Summary */}
-
-            <MonthlySummary
-              summary={monthlySummary}
-            />
-
-            {/* Consumption History */}
-
-            <ConsumptionHistory
-              refreshKey={historyRefreshKey}
-            />
-
-            {/* Price History */}
-
-            <PriceHistory />
-
-          </>
+          </div>
         )}
+
+        {/* Consumption */}
+
+        <QuickActions
+          user={user}
+          onConsumptionLogged={refreshDashboard}
+          hasInventory={batches.length > 0}
+        />
+
+        {/* Activity */}
+
+        <ActivityCard
+          activity={todayActivity}
+        />
+
+        {/* Monthly Summary */}
+
+        <MonthlySummary
+          summary={monthlySummary}
+        />
+
+        {/* Consumption History */}
+
+        <ConsumptionHistory
+          refreshKey={historyRefreshKey}
+        />
+
+        {/* Price History */}
+
+        <PriceHistory />
+
+
 
       </div>
 
