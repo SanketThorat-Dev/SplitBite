@@ -5,6 +5,7 @@ export default function ConsumptionHistory({ refreshKey }) {
   const [history, setHistory] = useState([]);
   const [filter, setFilter] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [displayedCount, setDisplayedCount] = useState(5);
 
   async function loadHistory() {
     try {
@@ -18,6 +19,7 @@ export default function ConsumptionHistory({ refreshKey }) {
   }
 
   useEffect(() => {
+    setDisplayedCount(5);
     loadHistory();
   }, [refreshKey]);
 
@@ -34,8 +36,10 @@ export default function ConsumptionHistory({ refreshKey }) {
     filter === "all"
       ? history
       : history.filter(
-          (item) => item.roommate_id === filter
-        );
+        (item) => item.roommate_id === filter
+      );
+
+  const displayedHistory = filteredHistory.slice(0, displayedCount);
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-2xl shadow p-6 mt-5 text-gray-900 dark:text-gray-100">
@@ -48,7 +52,10 @@ export default function ConsumptionHistory({ refreshKey }) {
 
       <select
         value={filter}
-        onChange={(e) => setFilter(e.target.value)}
+        onChange={(e) => {
+          setFilter(e.target.value);
+          setDisplayedCount(5);
+        }}
         className="border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 rounded-lg w-full p-3 mb-5"
       >
         <option value="all">
@@ -77,7 +84,7 @@ export default function ConsumptionHistory({ refreshKey }) {
       {!loading && filteredHistory.length > 0 && (
         <div className="space-y-3">
 
-          {filteredHistory.map((item) => (
+          {displayedHistory.map((item) => (
 
             <div
               key={item.id}
@@ -107,6 +114,17 @@ export default function ConsumptionHistory({ refreshKey }) {
             </div>
 
           ))}
+
+          {displayedCount < filteredHistory.length && (
+            <button
+              onClick={() =>
+                setDisplayedCount((prev) => prev + 5)
+              }
+              className="w-full mt-4 bg-slate-100 dark:bg-slate-700 text-gray-800 dark:text-gray-100 rounded-xl py-3 font-medium hover:bg-slate-200 dark:hover:bg-slate-600 transition"
+            >
+              Show More
+            </button>
+          )}
 
         </div>
       )}
