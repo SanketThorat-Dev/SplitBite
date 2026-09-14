@@ -118,30 +118,30 @@ export default function Dashboard() {
 
           <button
             onClick={logout}
-            className="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 transition"
+            className="bg-red-500 text-white px-3 py-2 rounded-xl hover:bg-red-600 transition text-sm"
           >
             🚪 Logout
           </button>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-nowrap justify-end">
 
             <button
               onClick={toggleTheme}
-              className="bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 px-4 py-2 rounded-xl shadow hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+              className="bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 px-3 py-2 rounded-xl shadow hover:bg-gray-100 dark:hover:bg-slate-700 transition text-sm"
             >
               {theme === "dark" ? "☀️" : "🌙"}
             </button>
 
             <button
               onClick={() => navigate("/change-pin")}
-              className="bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 px-4 py-2 rounded-xl shadow hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+              className="bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 px-3 py-2 rounded-xl shadow hover:bg-gray-100 dark:hover:bg-slate-700 transition text-sm"
             >
               🔐 PIN
             </button>
 
             <button
               onClick={() => navigate("/admin")}
-              className="bg-black dark:bg-white text-white dark:text-black px-4 py-2 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-200 transition"
+              className="bg-black dark:bg-white text-white dark:text-black px-3 py-2 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-200 transition text-sm"
             >
               ⚙️ Admin
             </button>
