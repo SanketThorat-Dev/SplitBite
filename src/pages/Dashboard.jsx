@@ -13,6 +13,7 @@ import PriceHistory from "../components/dashboard/PriceHistory";
 
 import { getTodayActivity } from "../services/activity";
 import { getMonthlySummary } from "../services/summary";
+import { getTheme, applyTheme } from "../utils/theme";
 
 export default function Dashboard() {
   const user = getCurrentUser();
@@ -23,6 +24,7 @@ export default function Dashboard() {
   const [todayActivity, setTodayActivity] = useState([]);
   const [monthlySummary, setMonthlySummary] = useState([]);
   const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
+  const [theme, setTheme] = useState(getTheme());
 
   async function loadBatch() {
     try {
@@ -80,6 +82,13 @@ export default function Dashboard() {
     navigate("/");
   }
 
+  function toggleTheme() {
+    const newTheme = theme === "dark" ? "light" : "dark";
+
+    applyTheme(newTheme);
+    setTheme(newTheme);
+  }
+
   useEffect(() => {
     refreshDashboard();
   }, []);
@@ -89,7 +98,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 p-6">
+    <div className="min-h-screen bg-slate-100 dark:bg-slate-900 p-6">
 
       <div className="max-w-md mx-auto">
 
@@ -99,7 +108,7 @@ export default function Dashboard() {
           Hi, {user.name} 👋
         </h1>
 
-        <p className="text-gray-500 mb-6">
+        <p className="text-gray-500 dark:text-gray-400 mb-6">
           Welcome back to SplitBite
         </p>
 
@@ -117,15 +126,22 @@ export default function Dashboard() {
           <div className="flex gap-2">
 
             <button
+              onClick={toggleTheme}
+              className="bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 px-4 py-2 rounded-xl shadow hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+            >
+              {theme === "dark" ? "☀️" : "🌙"}
+            </button>
+
+            <button
               onClick={() => navigate("/change-pin")}
-              className="bg-white px-4 py-2 rounded-xl shadow hover:bg-gray-100 transition"
+              className="bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 px-4 py-2 rounded-xl shadow hover:bg-gray-100 dark:hover:bg-slate-700 transition"
             >
               🔐 PIN
             </button>
 
             <button
               onClick={() => navigate("/admin")}
-              className="bg-black text-white px-4 py-2 rounded-xl hover:bg-gray-800 transition"
+              className="bg-black dark:bg-white text-white dark:text-black px-4 py-2 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-200 transition"
             >
               ⚙️ Admin
             </button>
@@ -137,7 +153,7 @@ export default function Dashboard() {
         {/* Loading */}
 
         {loading && (
-          <p className="text-gray-500">
+          <p className="text-gray-500 dark:text-gray-400">
             Loading inventory...
           </p>
         )}
@@ -145,22 +161,24 @@ export default function Dashboard() {
         {/* No inventory */}
 
         {!loading && batches.length === 0 && (
-          <div className="bg-white rounded-2xl shadow p-6 text-center">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow dark:shadow-black/20 p-6 text-center text-gray-900 dark:text-gray-100">
+
             <div className="text-4xl mb-3">
               🥚
             </div>
 
-            <h2 className="text-xl font-bold text-gray-800">
+            <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">
               No eggs available
             </h2>
 
-            <p className="text-gray-500 mt-2">
+            <p className="text-gray-500 dark:text-gray-300 mt-2">
               The current inventory has been fully consumed.
             </p>
 
-            <p className="text-sm text-gray-400 mt-1">
+            <p className="text-sm text-gray-400 dark:text-gray-400 mt-1">
               Add a new batch from the Admin page when you restock.
             </p>
+
           </div>
         )}
 
@@ -209,8 +227,6 @@ export default function Dashboard() {
         {/* Price History */}
 
         <PriceHistory />
-
-
 
       </div>
 

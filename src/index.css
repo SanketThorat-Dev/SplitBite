@@ -2,9 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-    margin:0;
-    padding:0;
-    background:#f8fafc;
-    font-family:Inter,sans-serif;
+body {
+  margin: 0;
+  padding: 0;
+  background: #f8fafc;
+  color: #0f172a;
+  font-family: Inter, sans-serif;
+}
+
+html.dark body {
+  background: #0f172a;
+  color: #f8fafc;
 }

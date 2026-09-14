@@ -10,18 +10,18 @@ export default function MonthlySummary({ summary }) {
   );
 
   return (
-    <div className="bg-white rounded-2xl shadow p-6 mt-5">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow p-6 mt-5 text-gray-900 dark:text-gray-100">
 
       <h2 className="text-xl font-bold mb-2">
         📊 This Month
       </h2>
 
-      <p className="text-sm text-gray-500 mb-5">
+      <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">
         Roommate consumption breakdown
       </p>
 
       {summary.length === 0 && (
-        <p className="text-gray-500">
+        <p className="text-gray-500 dark:text-gray-400">
           No consumption this month yet.
         </p>
       )}
@@ -41,7 +41,7 @@ export default function MonthlySummary({ summary }) {
           return (
             <div
               key={person.roommate_id}
-              className="border-b pb-4 last:border-b-0"
+              className="border-b border-gray-200 dark:border-slate-600 pb-4 last:border-b-0"
             >
 
               <div className="flex justify-between items-center">
@@ -51,7 +51,7 @@ export default function MonthlySummary({ summary }) {
                     {person.roommate_name}
                   </p>
 
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     🥚 {eggs} eggs
                   </p>
                 </div>
@@ -62,7 +62,7 @@ export default function MonthlySummary({ summary }) {
                     ₹{amount.toFixed(2)}
                   </p>
 
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     {percentage.toFixed(1)}%
                   </p>
 
@@ -72,7 +72,7 @@ export default function MonthlySummary({ summary }) {
 
               {/* Consumption percentage bar */}
 
-              <div className="w-full bg-gray-200 rounded-full h-2 mt-3">
+              <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 mt-3">
 
                 <div
                   className="bg-green-500 h-2 rounded-full"
@@ -92,7 +92,7 @@ export default function MonthlySummary({ summary }) {
       {/* Total */}
 
       {summary.length > 0 && (
-        <div className="border-t mt-5 pt-5">
+        <div className="border-t border-gray-200 dark:border-slate-600 mt-5 pt-5">
 
           <div className="flex justify-between">
 
@@ -101,7 +101,7 @@ export default function MonthlySummary({ summary }) {
                 Total
               </p>
 
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 🥚 {totalEggs} eggs
               </p>
             </div>

@@ -18,8 +18,8 @@ export default function ConsumptionHistory({ refreshKey }) {
   }
 
   useEffect(() => {
-  loadHistory();
-}, [refreshKey]);
+    loadHistory();
+  }, [refreshKey]);
 
   const roommates = [
     ...new Map(
@@ -38,7 +38,7 @@ export default function ConsumptionHistory({ refreshKey }) {
         );
 
   return (
-    <div className="bg-white rounded-2xl shadow p-6 mt-5">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow p-6 mt-5 text-gray-900 dark:text-gray-100">
 
       <h2 className="text-xl font-bold mb-4">
         📜 Consumption History
@@ -49,7 +49,7 @@ export default function ConsumptionHistory({ refreshKey }) {
       <select
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
-        className="border rounded-lg w-full p-3 mb-5"
+        className="border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 rounded-lg w-full p-3 mb-5"
       >
         <option value="all">
           Everyone
@@ -63,13 +63,13 @@ export default function ConsumptionHistory({ refreshKey }) {
       </select>
 
       {loading && (
-        <p className="text-gray-500">
+        <p className="text-gray-500 dark:text-gray-400">
           Loading history...
         </p>
       )}
 
       {!loading && filteredHistory.length === 0 && (
-        <p className="text-gray-500">
+        <p className="text-gray-500 dark:text-gray-400">
           No consumption records yet.
         </p>
       )}
@@ -81,7 +81,7 @@ export default function ConsumptionHistory({ refreshKey }) {
 
             <div
               key={item.id}
-              className="flex justify-between items-center border-b pb-3 last:border-b-0"
+              className="flex justify-between items-center border-b border-gray-200 dark:border-slate-600 pb-3 last:border-b-0"
             >
 
               <div>
@@ -89,7 +89,7 @@ export default function ConsumptionHistory({ refreshKey }) {
                   {item.roommate_name}
                 </p>
 
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   {new Date(
                     item.consumed_on + "T00:00:00"
                   ).toLocaleDateString("en-IN", {

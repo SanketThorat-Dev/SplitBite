@@ -42,7 +42,7 @@ export default function InventoryCard({ batch, monthlySummary = [] }) {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow p-6">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow dark:shadow-black/20 p-6 text-gray-900 dark:text-gray-100">
 
       {/* Batch information */}
 
@@ -54,7 +54,7 @@ export default function InventoryCard({ batch, monthlySummary = [] }) {
             {batch.inventory_items.name}
           </h2>
 
-          <p className="text-gray-500">
+          <p className="text-gray-500 dark:text-gray-400">
             Purchased on {batch.purchase_date}
           </p>
 
@@ -66,7 +66,7 @@ export default function InventoryCard({ batch, monthlySummary = [] }) {
             ₹{Number(batch.price).toFixed(2)}
           </p>
 
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-500 dark:text-gray-400">
             Batch price
           </p>
 
@@ -91,15 +91,16 @@ export default function InventoryCard({ batch, monthlySummary = [] }) {
 
         </div>
 
-        <div className="w-full bg-gray-200 rounded-full h-3 mt-3">
+        <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-3 mt-3">
 
           <div
-            className={`h-3 rounded-full transition-all ${percent <= 20
+            className={`h-3 rounded-full transition-all ${
+              percent <= 20
                 ? "bg-red-500"
                 : percent <= 35
                   ? "bg-orange-500"
                   : "bg-green-500"
-              }`}
+            }`}
             style={{
               width: `${Math.min(100, Math.max(0, percent))}%`,
             }}
@@ -107,7 +108,7 @@ export default function InventoryCard({ batch, monthlySummary = [] }) {
 
         </div>
 
-        <p className="text-sm text-gray-500 mt-2">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
           {percent}% remaining
         </p>
 
@@ -122,9 +123,9 @@ export default function InventoryCard({ batch, monthlySummary = [] }) {
         </p>
 
         {estimatedDays !== null && (
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             At your current usage, approximately{" "}
-            <span className="font-semibold text-gray-700">
+            <span className="font-semibold text-gray-700 dark:text-gray-200">
               {estimatedDays} days
             </span>{" "}
             of stock remain.
@@ -132,7 +133,7 @@ export default function InventoryCard({ batch, monthlySummary = [] }) {
         )}
 
         {estimatedDays === null && (
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Not enough consumption data to estimate usage yet.
           </p>
         )}

@@ -5,17 +5,9 @@ import { getRoommates } from "../services/roommates";
 import LoginCard from "../components/auth/LoginCard";
 import { getCurrentUser } from "../utils/session";
 
-
-
 export default function Login() {
   const [roommates, setRoommates] = useState([]);
-
-  // ✅ Check if user is already logged in
   const user = getCurrentUser();
-
-if (user) {
-  return <Navigate to="/dashboard" replace />;
-}
 
   useEffect(() => {
     async function loadRoommates() {
@@ -30,15 +22,19 @@ if (user) {
     loadRoommates();
   }, []);
 
-  return (
-    <div className="min-h-screen bg-slate-100 p-6">
-      <div className="max-w-md mx-auto">
+  // Redirect logged-in users after hooks have been called
+  if (user) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
+  return (
+    <div className="min-h-screen bg-slate-100 dark:bg-slate-900 p-6 text-gray-900 dark:text-gray-100">
+      <div className="max-w-md mx-auto">
         <h1 className="text-4xl font-bold text-center mt-10">
           🥚 SplitBite
         </h1>
 
-        <p className="text-center text-slate-500 mt-2 mb-10">
+        <p className="text-center text-slate-500 dark:text-slate-400 mt-2 mb-10">
           Track. Eat. Split Fairly.
         </p>
 
@@ -54,7 +50,6 @@ if (user) {
             />
           ))}
         </div>
-
       </div>
     </div>
   );

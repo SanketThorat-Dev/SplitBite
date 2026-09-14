@@ -1,6 +1,6 @@
 export default function ActivityCard({ activity }) {
   return (
-    <div className="bg-white rounded-2xl shadow p-6 mt-5">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow p-6 mt-5 text-gray-900 dark:text-gray-100">
 
       <h2 className="text-xl font-bold mb-4">
         📋 Today's Activity
@@ -16,15 +16,11 @@ export default function ActivityCard({ activity }) {
           >
 
             <span className="font-medium">
-
               {person.roommate_name}
-
             </span>
 
             <span className="font-bold text-green-600">
-
               🥚 {person.total_quantity}
-
             </span>
 
           </div>

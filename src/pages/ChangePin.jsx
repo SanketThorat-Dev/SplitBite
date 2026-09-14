@@ -73,7 +73,7 @@ export default function ChangePin() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 p-6">
+    <div className="min-h-screen bg-slate-100 dark:bg-slate-900 p-6 text-gray-900 dark:text-gray-100">
 
       <div className="max-w-md mx-auto">
 
@@ -83,7 +83,7 @@ export default function ChangePin() {
 
           <button
             onClick={() => navigate("/dashboard")}
-            className="bg-white px-4 py-2 rounded-xl shadow hover:bg-gray-100"
+            className="bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 px-4 py-2 rounded-xl shadow dark:shadow-black/20 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
           >
             ← Dashboard
           </button>
@@ -93,7 +93,7 @@ export default function ChangePin() {
               localStorage.removeItem("roommate");
               navigate("/");
             }}
-            className="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600"
+            className="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 transition"
           >
             🚪 Logout
           </button>
@@ -102,63 +102,66 @@ export default function ChangePin() {
 
         {/* Change PIN Card */}
 
-        <div className="bg-white rounded-2xl shadow p-8">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow dark:shadow-black/20 p-8">
 
           <h1 className="text-3xl font-bold">
             🔐 Change PIN
           </h1>
 
-          <p className="text-gray-500 mt-2 mb-6">
+          <p className="text-gray-500 dark:text-gray-400 mt-2 mb-6">
             Change your SplitBite login PIN.
           </p>
 
           <form onSubmit={handleChangePin}>
 
-            <label className="text-sm text-gray-600">
+            <label className="text-sm text-gray-600 dark:text-gray-300">
               Current PIN
             </label>
 
             <input
               type="password"
               inputMode="numeric"
+              enterKeyHint="next"
               maxLength={4}
               value={currentPin}
               onChange={(e) =>
                 setCurrentPin(e.target.value.replace(/\D/g, ""))
               }
-              className="border rounded-lg w-full p-3 mt-2"
+              className="border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 rounded-lg w-full p-3 mt-2"
               placeholder="••••"
             />
 
-            <label className="text-sm text-gray-600 block mt-5">
+            <label className="text-sm text-gray-600 dark:text-gray-300 block mt-5">
               New PIN
             </label>
 
             <input
               type="password"
               inputMode="numeric"
+              enterKeyHint="next"
               maxLength={4}
               value={newPin}
               onChange={(e) =>
                 setNewPin(e.target.value.replace(/\D/g, ""))
               }
-              className="border rounded-lg w-full p-3 mt-2"
+              className="border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 rounded-lg w-full p-3 mt-2"
               placeholder="••••"
             />
 
-            <label className="text-sm text-gray-600 block mt-5">
+            <label className="text-sm text-gray-600 dark:text-gray-300 block mt-5">
               Confirm New PIN
             </label>
 
             <input
               type="password"
               inputMode="numeric"
+              enterKeyHint="done"
               maxLength={4}
               value={confirmPin}
               onChange={(e) =>
                 setConfirmPin(e.target.value.replace(/\D/g, ""))
               }
-              className="border rounded-lg w-full p-3 mt-2"
+              className="border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 rounded-lg w-full p-3 mt-2"
               placeholder="••••"
             />
 

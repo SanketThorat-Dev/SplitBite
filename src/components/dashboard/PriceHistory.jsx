@@ -36,24 +36,24 @@ export default function PriceHistory() {
       : 0;
 
   return (
-    <div className="bg-white rounded-2xl shadow p-6 mt-5">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow p-6 mt-5 text-gray-900 dark:text-gray-100">
 
       <h2 className="text-xl font-bold mb-2">
         💰 Egg Price History
       </h2>
 
-      <p className="text-sm text-gray-500 mb-5">
+      <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">
         Price per egg across your batches
       </p>
 
       {loading && (
-        <p className="text-gray-500">
+        <p className="text-gray-500 dark:text-gray-400">
           Loading price history...
         </p>
       )}
 
       {!loading && batches.length === 0 && (
-        <p className="text-gray-500">
+        <p className="text-gray-500 dark:text-gray-400">
           No batch history available yet.
         </p>
       )}
@@ -82,7 +82,7 @@ export default function PriceHistory() {
               return (
                 <div
                   key={batch.id}
-                  className="flex justify-between items-center border-b pb-3 last:border-b-0"
+                  className="flex justify-between items-center border-b border-gray-200 dark:border-slate-600 pb-3 last:border-b-0"
                 >
 
                   <div>
@@ -91,7 +91,7 @@ export default function PriceHistory() {
                       {date}
                     </p>
 
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                       {quantity} eggs · ₹
                       {price.toFixed(2)} total
                     </p>
@@ -104,7 +104,7 @@ export default function PriceHistory() {
                       ₹{pricePerEgg.toFixed(2)}
                     </p>
 
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
                       per egg
                     </p>
 
@@ -116,7 +116,7 @@ export default function PriceHistory() {
 
           </div>
 
-          <div className="border-t mt-5 pt-5 flex justify-between">
+          <div className="border-t border-gray-200 dark:border-slate-600 mt-5 pt-5 flex justify-between">
 
             <span className="font-semibold">
               Average price

@@ -16,7 +16,9 @@ export default function Admin() {
 
   const ADMIN_PIN = import.meta.env.VITE_ADMIN_PIN;
 
-  function unlockAdmin() {
+  function unlockAdmin(e) {
+    e?.preventDefault();
+
     if (pin === ADMIN_PIN) {
       setAuthorized(true);
       setMessage("");
@@ -56,14 +58,15 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 p-8">
+    <div className="min-h-screen bg-slate-100 dark:bg-slate-900 p-8 text-gray-900 dark:text-gray-100">
 
       {/* Navigation */}
+
       <div className="max-w-md mx-auto flex justify-between items-center mb-6">
 
         <button
           onClick={() => navigate("/dashboard")}
-          className="bg-white px-4 py-2 rounded-xl shadow hover:bg-gray-100 transition"
+          className="bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 px-4 py-2 rounded-xl shadow dark:shadow-black/20 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
         >
           ← Dashboard
         </button>
@@ -79,13 +82,16 @@ export default function Admin() {
 
       {!authorized ? (
 
-        <div className="max-w-md mx-auto bg-white rounded-2xl shadow p-8">
+        <form
+          onSubmit={unlockAdmin}
+          className="max-w-md mx-auto bg-white dark:bg-slate-800 rounded-2xl shadow dark:shadow-black/20 p-8"
+        >
 
           <h1 className="text-3xl font-bold">
             ⚙️ Admin
           </h1>
 
-          <p className="text-gray-500 mt-2">
+          <p className="text-gray-500 dark:text-gray-400 mt-2">
             Enter Admin PIN
           </p>
 
@@ -93,13 +99,14 @@ export default function Admin() {
             type="password"
             value={pin}
             onChange={(e) => setPin(e.target.value)}
-            className="border rounded-lg w-full p-3 mt-5"
+            enterKeyHint="done"
+            className="border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 rounded-lg w-full p-3 mt-5"
             placeholder="Admin PIN"
           />
 
           <button
-            onClick={unlockAdmin}
-            className="w-full bg-black text-white rounded-xl py-3 mt-5 hover:bg-gray-800 transition"
+            type="submit"
+            className="w-full bg-black dark:bg-white text-white dark:text-black rounded-xl py-3 mt-5 hover:bg-gray-800 dark:hover:bg-gray-200 transition"
           >
             Unlock
           </button>
@@ -110,17 +117,17 @@ export default function Admin() {
             </p>
           )}
 
-        </div>
+        </form>
 
       ) : (
 
-        <div className="max-w-md mx-auto bg-white rounded-2xl shadow p-8">
+        <div className="max-w-md mx-auto bg-white dark:bg-slate-800 rounded-2xl shadow dark:shadow-black/20 p-8">
 
           <h1 className="text-3xl font-bold">
             🥚 Create New Egg Batch
           </h1>
 
-          <p className="text-gray-500 mt-2">
+          <p className="text-gray-500 dark:text-gray-400 mt-2">
             Start a fresh batch for the flat.
           </p>
 
@@ -128,7 +135,7 @@ export default function Admin() {
             type="number"
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
-            className="border rounded-lg w-full p-3 mt-6"
+            className="border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 rounded-lg w-full p-3 mt-6"
             placeholder="Total Eggs"
           />
 
@@ -136,7 +143,7 @@ export default function Admin() {
             type="number"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            className="border rounded-lg w-full p-3 mt-4"
+            className="border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 rounded-lg w-full p-3 mt-4"
             placeholder="Total Price (₹)"
           />
 
