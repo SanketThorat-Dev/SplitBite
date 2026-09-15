@@ -7,6 +7,7 @@ import { getCurrentUser } from "../utils/session";
 
 export default function Login() {
   const [roommates, setRoommates] = useState([]);
+  const [loading, setLoading] = useState(true);
   const user = getCurrentUser();
 
   useEffect(() => {
@@ -16,6 +17,8 @@ export default function Login() {
         setRoommates(data);
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -43,12 +46,43 @@ export default function Login() {
         </h2>
 
         <div className="space-y-4">
-          {roommates.map((roommate) => (
-            <LoginCard
-              key={roommate.id}
-              roommate={roommate}
-            />
-          ))}
+          {loading && (
+            <p className="text-center text-sm text-slate-400 dark:text-slate-500 mb-4">
+              Loading roommates...
+            </p>
+          )}
+
+          {loading ? (
+            <>
+              {[1, 2, 3, 4].map((item) => (
+                <div
+                  key={item}
+                  className="bg-white dark:bg-slate-800 rounded-2xl shadow-md dark:shadow-black/20 p-6"
+                >
+                  <div className="flex flex-col items-center animate-pulse">
+
+                    {/* Avatar */}
+                    <div className="w-16 h-16 bg-slate-200 dark:bg-slate-700 rounded-full" />
+
+                    {/* Name */}
+                    <div className="h-5 w-28 bg-slate-200 dark:bg-slate-700 rounded-full mt-4" />
+
+                    {/* Subtitle */}
+                    <div className="h-4 w-36 bg-slate-200 dark:bg-slate-700 rounded-full mt-3" />
+
+                  </div>
+                </div>
+              ))}
+            </>
+          ) : (
+            roommates.map((roommate) => (
+              <LoginCard
+                key={roommate.id}
+                roommate={roommate}
+              />
+            ))
+          )}
+
         </div>
       </div>
     </div>
