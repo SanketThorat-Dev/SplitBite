@@ -5,12 +5,63 @@ export default function QuickActions({
   user,
   onConsumptionLogged,
   hasInventory,
+  batches,
 }) {
   const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
 
+  // Default consumption date = today
+  const now = new Date();
+
+  const today = [
+    now.getFullYear(),
+    String(now.getMonth() + 1).padStart(2, "0"),
+    String(now.getDate()).padStart(2, "0"),
+  ].join("-");
+
+  const [consumptionDate, setConsumptionDate] = useState(today);
+
   // Quantity waiting for confirmation
   const [pendingQuantity, setPendingQuantity] = useState(null);
+
+  function formatDisplayDate(dateString) {
+    if (!dateString) return "";
+
+    const [year, month, day] = dateString.split("-");
+
+    const date = new Date(
+      Number(year),
+      Number(month) - 1,
+      Number(day)
+    );
+
+    return date.toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  }
+
+  /*
+   * Earliest batch purchase date.
+   *
+   * This prevents users from logging consumption
+   * before the inventory history begins.
+   */
+  const earliestBatchDate =
+    batches && batches.length > 0
+      ? batches.reduce((earliest, batch) => {
+        if (!batch.purchase_date) return earliest;
+
+        if (!earliest) return batch.purchase_date;
+
+        return batch.purchase_date < earliest
+          ? batch.purchase_date
+          : earliest;
+      }, null)
+      : "";
+
+
 
   function requestConsumption(qty) {
     if (loading) return;
@@ -27,6 +78,26 @@ export default function QuickActions({
       return;
     }
 
+    if (!consumptionDate) {
+      alert("Please select a consumption date");
+      return;
+    }
+
+    if (
+      earliestBatchDate &&
+      consumptionDate < earliestBatchDate
+    ) {
+      alert(
+        "Consumption date cannot be before the current inventory batch date."
+      );
+      return;
+    }
+
+    if (consumptionDate > today) {
+      alert("Consumption date cannot be in the future.");
+      return;
+    }
+
     // Don't log yet — ask for confirmation
     setPendingQuantity(qty);
   }
@@ -39,7 +110,8 @@ export default function QuickActions({
 
       await logConsumption(
         user.id,
-        pendingQuantity
+        pendingQuantity,
+        consumptionDate
       );
 
       setQuantity(1);
@@ -74,6 +146,36 @@ export default function QuickActions({
           start logging consumption.
         </p>
       )}
+
+      {/* Consumption Date */}
+
+      <div className="mt-5">
+
+        <label className="text-sm text-gray-500 dark:text-gray-400">
+          Consumption Date
+        </label>
+
+        <input
+          type="date"
+          value={consumptionDate}
+          min={earliestBatchDate || undefined}
+          max={today}
+          disabled={loading || !hasInventory}
+          onChange={(e) => setConsumptionDate(e.target.value)}
+          className="w-full border border-gray-300 dark:border-slate-600
+             bg-white dark:bg-slate-700
+             text-gray-900 dark:text-gray-100
+             rounded-xl p-3"
+        />
+
+        {earliestBatchDate && (
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
+            You can log consumption from{" "}
+            {formatDisplayDate(earliestBatchDate)} onwards.
+          </p>
+        )}
+
+      </div>
 
       {/* Quick Buttons */}
 
@@ -172,6 +274,10 @@ export default function QuickActions({
             <span className="font-bold text-gray-900 dark:text-white">
               {pendingQuantity}{" "}
               {pendingQuantity === 1 ? "egg" : "eggs"}
+            </span>
+            {" "}for{" "}
+            <span className="font-bold text-gray-900 dark:text-white">
+              {formatDisplayDate(consumptionDate)}
             </span>
             ?
           </p>

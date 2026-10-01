@@ -205,6 +205,7 @@ export default function Dashboard() {
           user={user}
           onConsumptionLogged={refreshDashboard}
           hasInventory={batches.length > 0}
+          batches={batches}
         />
 
         {/* Activity */}
