@@ -12,7 +12,7 @@ import ConsumptionHistory from "../components/dashboard/ConsumptionHistory";
 import PriceHistory from "../components/dashboard/PriceHistory";
 
 import { getTodayActivity } from "../services/activity";
-import { getMonthlySummary } from "../services/summary";
+import {getMonthlySummary,getMonthlyBatchSummary,} from "../services/summary";
 import { getTheme, applyTheme } from "../utils/theme";
 
 export default function Dashboard() {
@@ -23,6 +23,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [todayActivity, setTodayActivity] = useState([]);
   const [monthlySummary, setMonthlySummary] = useState([]);
+  const [monthlyBatchSummary, setMonthlyBatchSummary] = useState([]);
   const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
   const [theme, setTheme] = useState(getTheme());
 
@@ -51,15 +52,21 @@ export default function Dashboard() {
   }
 
   async function loadMonthlySummary() {
-    try {
-      const summary = await getMonthlySummary();
+  try {
+    const [summary, batchSummary] = await Promise.all([
+      getMonthlySummary(),
+      getMonthlyBatchSummary(),
+    ]);
 
-      setMonthlySummary(summary || []);
-    } catch (err) {
-      console.error("Failed to load monthly summary:", err);
-      setMonthlySummary([]);
-    }
+    setMonthlySummary(summary || []);
+    setMonthlyBatchSummary(batchSummary || []);
+
+  } catch (err) {
+    console.error("Failed to load monthly summary:", err);
+    setMonthlySummary([]);
+    setMonthlyBatchSummary([]);
   }
+}
 
   async function refreshDashboard() {
     setLoading(true);
@@ -218,6 +225,7 @@ export default function Dashboard() {
 
         <MonthlySummary
           summary={monthlySummary}
+          batchSummary={monthlyBatchSummary}
         />
 
         {/* Consumption History */}
