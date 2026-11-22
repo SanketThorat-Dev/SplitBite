@@ -4,6 +4,7 @@ import { getBatchPriceHistory } from "../../services/inventory";
 export default function PriceHistory() {
   const [batches, setBatches] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [displayedCount, setDisplayedCount] = useState(3);
 
   async function loadPriceHistory() {
     try {
@@ -17,6 +18,7 @@ export default function PriceHistory() {
   }
 
   useEffect(() => {
+    setDisplayedCount(3);
     loadPriceHistory();
   }, []);
 
@@ -34,6 +36,8 @@ export default function PriceHistory() {
       ? prices.reduce((sum, price) => sum + price, 0) /
         prices.length
       : 0;
+
+  const displayedBatches = batches.slice(0, displayedCount);
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-2xl shadow p-6 mt-5 text-gray-900 dark:text-gray-100">
@@ -62,14 +66,12 @@ export default function PriceHistory() {
         <>
           <div className="space-y-3">
 
-            {batches.map((batch) => {
+            {displayedBatches.map((batch) => {
               const quantity = Number(batch.quantity);
               const price = Number(batch.price);
 
               const pricePerEgg =
-                quantity > 0
-                  ? price / quantity
-                  : 0;
+                quantity > 0 ? price / quantity : 0;
 
               const date = new Date(
                 batch.purchase_date + "T00:00:00"
@@ -84,9 +86,7 @@ export default function PriceHistory() {
                   key={batch.id}
                   className="flex justify-between items-center border-b border-gray-200 dark:border-slate-600 pb-3 last:border-b-0"
                 >
-
                   <div>
-
                     <p className="font-semibold">
                       {date}
                     </p>
@@ -95,11 +95,9 @@ export default function PriceHistory() {
                       {quantity} eggs · ₹
                       {price.toFixed(2)} total
                     </p>
-
                   </div>
 
                   <div className="text-right">
-
                     <p className="font-bold">
                       ₹{pricePerEgg.toFixed(2)}
                     </p>
@@ -107,17 +105,25 @@ export default function PriceHistory() {
                     <p className="text-xs text-gray-500 dark:text-gray-400">
                       per egg
                     </p>
-
                   </div>
-
                 </div>
               );
             })}
 
+            {displayedCount < batches.length && (
+              <button
+                onClick={() =>
+                  setDisplayedCount((prev) => prev + 3)
+                }
+                className="w-full mt-4 bg-slate-100 dark:bg-slate-700 text-gray-800 dark:text-gray-100 rounded-xl py-3 font-medium hover:bg-slate-200 dark:hover:bg-slate-600 transition"
+              >
+                Show More
+              </button>
+            )}
+
           </div>
 
           <div className="border-t border-gray-200 dark:border-slate-600 mt-5 pt-5 flex justify-between">
-
             <span className="font-semibold">
               Average price
             </span>
@@ -125,7 +131,6 @@ export default function PriceHistory() {
             <span className="font-bold">
               ₹{averagePrice.toFixed(2)} / egg
             </span>
-
           </div>
         </>
       )}
